@@ -1,0 +1,99 @@
+package ${package.Controller};
+
+import org.springframework.web.bind.annotation.RequestMapping;
+#if(${restControllerStyle})
+import org.springframework.web.bind.annotation.RestController;
+#else
+import org.springframework.stereotype.Controller;
+#end
+#if(${superControllerClassPackage})
+import ${superControllerClassPackage};
+#end
+import cn.wnhyang.generator.pojo.PageResult;
+
+import static cn.wnhyang.generator.pojo.CommonResult.success;
+
+/**
+ * $!{table.comment}
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${restControllerStyle})
+@RestController
+#else
+@Controller
+#end
+@RequestMapping("#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
+@RequiredArgsConstructor
+#if(${kotlin})
+class ${table.controllerName}#if(${superControllerClass}) : ${superControllerClass}()#end
+
+#else
+#if(${superControllerClass})
+public class ${table.controllerName} extends ${superControllerClass} {
+#else
+public class ${table.controllerName} {
+#end
+
+    private final ${entity}Service ${table.entityPath}Service;
+    
+    /**
+     * 新增
+     *
+     * @param createVO 创建VO
+     * @return id
+     */
+    @PostMapping
+    public CommonResult<Long> create${entity}(@RequestBody @Valid ${entity}CreateVO createVO) {
+        Long ${entity}Id = ${table.entityPath}Service.create${entity}(createVO);
+        return success(${entity}Id);
+    }
+    
+    /**
+     * 更新
+     *
+     * @param updateVO 更新VO
+     * @return true/false
+     */
+    @PutMapping
+    public CommonResult<Boolean> update${entity}(@RequestBody @Valid ${entity}UpdateVO updateVO) {
+        ${table.entityPath}Service.update${entity}(updateVO);
+        return success(true);
+    }
+    
+    /**
+     * 删除
+     *
+     * @param id id
+     * @return true/false
+     */
+    @DeleteMapping
+    public CommonResult<Boolean> delete${entity}(@RequestParam("id") Long id) {
+        ${table.entityPath}Service.delete${entity}(id);
+        return success(true);
+    }
+    
+    /**
+     * 查询单个
+     *
+     * @param id id
+     * @return vo
+     */
+    @GetMapping("/{id}")
+    public CommonResult<${entity}VO> get${entity}(@PathVariable("id") Long id) {
+        return success(${entity}Convert.INSTANCE.convert(${table.entityPath}Service.get${entity}(id)));
+    }
+    
+    /**
+     * 分页查询
+     *
+     * @param pageVO 分页VO
+     * @return pageResult
+     */
+    @GetMapping("/page")
+    public CommonResult<PageResult<${entity}VO>> page${entity}(@Valid ${entity}PageVO pageVO) {
+        return success(${entity}Convert.INSTANCE.convert(${table.entityPath}Service.page${entity}(pageVO)));
+    }
+}
+#end

@@ -1,0 +1,61 @@
+package ${cfg.vo};
+
+#foreach($pkg in ${table.importPackages})
+import ${pkg};
+#end
+#if(${springdoc})
+import io.swagger.v3.oas.annotations.media.Schema;
+#elseif(${swagger})
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+#end
+#if(${entityLombokModel})
+import lombok.*;
+#if(${chainModel})
+import lombok.experimental.Accessors;
+#end
+#end
+
+/**
+ * $!{table.comment}
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${entityLombokModel})
+@Data
+#end
+#if(${springdoc})
+@Schema(name = "${entity}", description = "$!{table.comment}")
+#elseif(${swagger})
+@ApiModel(value = "${entity}对象", description = "$!{table.comment}")
+#end
+#if(${entitySerialVersionUID})
+public class ${entity}VO extends ${entity}CreateVO {
+#else
+public class ${entity}VO {
+#end
+#if(${entitySerialVersionUID})
+
+    private static final long serialVersionUID = 1L;
+#end
+
+## ----------  BEGIN 字段循环遍历  ----------
+#foreach($field in ${table.fields})
+#if(${field.keyFlag})
+#if("$!field.comment" != "")
+    #if(${springdoc})
+    @Schema(description = "${field.comment}")
+    #elseif(${swagger})
+    @ApiModelProperty("${field.comment}")
+    #else
+    /**
+     * ${field.comment}
+     */
+    #end
+#end
+    private ${field.propertyType} ${field.propertyName};
+#end
+#end
+## ----------  END 字段循环遍历  ----------
+}

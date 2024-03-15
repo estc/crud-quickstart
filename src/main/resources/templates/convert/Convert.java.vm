@@ -1,0 +1,40 @@
+package ${cfg.convert};
+
+#foreach($pkg in ${table.importPackages})
+import ${pkg};
+#end
+#if(${springdoc})
+import io.swagger.v3.oas.annotations.media.Schema;
+#elseif(${swagger})
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+#end
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
+import cn.wnhyang.generator.pojo.PageResult;
+
+/**
+ * $!{table.comment}
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${springdoc})
+@Schema(name = "${entity}", description = "$!{table.comment}")
+#elseif(${swagger})
+@ApiModel(value = "${entity}对象", description = "$!{table.comment}")
+#end
+@Mapper
+public interface ${entity}Convert {
+
+    ${entity}Convert INSTANCE = Mappers.getMapper(${entity}Convert.class);
+
+    ${entity} convert(${entity}CreateVO createVO);
+
+    ${entity} convert(${entity}UpdateVO updateVO);
+
+    ${entity}VO convert(${entity} po);
+
+    PageResult<${entity}VO> convert(PageResult<${entity}> pageResult);
+
+}

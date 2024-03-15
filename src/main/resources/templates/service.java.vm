@@ -1,0 +1,52 @@
+package ${package.Service};
+
+import ${package.Entity}.${entity};
+import cn.wnhyang.generator.pojo.PageResult;
+
+/**
+ * $!{table.comment} 服务类
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+public interface ${table.serviceName} {
+
+    /**
+     * 新建
+     *
+     * @param createVO 新建VO
+     * @return id
+     */
+    Long create${entity}(${entity}CreateVO createVO);
+
+    /**
+     * 更新
+     *
+     * @param updateVO 更新VO
+     */
+    void update${entity}(${entity}UpdateVO updateVO);
+
+    /**
+     * 删除
+     *
+     * @param id id
+     */
+    void delete${entity}(Long id);
+
+    /**
+     * 查询单个
+     *
+     * @param id id
+     * @return po
+     */
+    ${entity} get${entity}(Long id);
+
+    /**
+     * 分页查询
+     *
+     * @param pageVO 分页VO
+     * @return pageResult
+     */
+    PageResult<${entity}> page${entity}(${entity}PageVO pageVO);
+
+}

@@ -1,0 +1,51 @@
+package ${package.ServiceImpl};
+
+import ${package.Entity}.${entity};
+import ${package.Mapper}.${table.mapperName};
+#if(${table.serviceInterface})
+import ${package.Service}.${table.serviceName};
+#end
+import org.springframework.stereotype.Service;
+import cn.wnhyang.generator.pojo.PageResult;
+
+/**
+ * $!{table.comment} 服务实现类
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Service
+@RequiredArgsConstructor
+public class ${table.serviceImplName} implements ${table.serviceName} {
+
+    private final ${entity}Mapper ${table.entityPath}Mapper;
+
+    @Override
+    public Long create${entity}(${entity}CreateVO createVO) {
+        ${entity} ${table.entityPath}Service = ${entity}Convert.INSTANCE.convert(createVO);
+        ${table.entityPath}Mapper.insert(${table.entityPath}Service);
+        return ${table.entityPath}Service.getId();
+    }
+
+    @Override
+    public void update${entity}(${entity}UpdateVO updateVO) {
+        ${entity} ${table.entityPath}Service = ${entity}Convert.INSTANCE.convert(updateVO);
+        ${table.entityPath}Mapper.updateById(${table.entityPath}Service);
+    }
+
+    @Override
+    public void delete${entity}(Long id) {
+        ${table.entityPath}Mapper.deleteById(id);
+    }
+
+    @Override
+    public ${entity} get${entity}(Long id) {
+        return ${table.entityPath}Mapper.selectById(id);
+    }
+
+    @Override
+    public PageResult<${entity}> page${entity}(${entity}PageVO pageVO) {
+        return ${table.entityPath}Mapper.selectPage(pageVO);
+    }
+
+}
