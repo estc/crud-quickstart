@@ -19,17 +19,17 @@ public class Generator {
     /**
      * 数据源
      */
-    private static final String DATASOURCE_URL = "jdbc:mysql://mysql:3306/dbName?allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true";
+    private static final String DATASOURCE_URL = "jdbc:mysql://mysql:3306/dbname?allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true";
 
     /**
      * 用户名
      */
-    private static final String USERNAME = "wnhyang";
+    private static final String USERNAME = "dbname";
 
     /**
      * 密码
      */
-    private static final String PASSWORD = "wnhyang";
+    private static final String PASSWORD = "dbpassword";
 
     private static final String MODULE_NAME = "";
 
