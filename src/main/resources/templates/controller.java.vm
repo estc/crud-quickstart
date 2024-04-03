@@ -46,8 +46,7 @@ public class ${table.controllerName} {
      */
     @PostMapping
     public CommonResult<Long> create${entity}(@RequestBody @Valid ${entity}CreateVO createVO) {
-        Long ${entity}Id = ${table.entityPath}Service.create${entity}(createVO);
-        return success(${entity}Id);
+        return success(${table.entityPath}Service.create${entity}(createVO));
     }
     
     /**

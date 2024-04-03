@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDateTime;
@@ -22,7 +23,7 @@ import java.util.TimeZone;
 @Slf4j
 public class JacksonConfig {
 
-    //@Bean
+    @Bean
     @ConditionalOnMissingBean
     public Jackson2ObjectMapperBuilderCustomizer customizer() {
         log.info("[Jackson2ObjectMapperBuilderCustomizer][初始化customizer配置]");
