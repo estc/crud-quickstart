@@ -107,9 +107,23 @@ public class ${table.controllerName} {
     * @throws IOException IO异常
     */
     @GetMapping("/export")
-    public void exportUserList(@Valid ${entity}PageVO pageVO, HttpServletResponse response) throws IOException {
+    public void exportExcel(@Valid ${entity}PageVO pageVO, HttpServletResponse response) throws IOException {
         // 输出 Excel
         ExcelUtils.write(response, "${entity}VO.xls", "数据", ${entity}VO.class, ${entity}Convert.INSTANCE.convert(${table.entityPath}Service.page(pageVO)).getList());
+    }
+
+    /**
+     * 导入
+     *
+     * @param file 文件
+     * @return 结果
+     * @throws IOException IO异常
+     */
+    @PostMapping("/import")
+    public CommonResult<Boolean> importExcel(@RequestParam("file") MultipartFile file) throws IOException {
+        List<${entity}VO> read = ExcelUtils.read(file, ${entity}VO.class);
+        // do something
+        return success(true);
     }
 }
 #end
