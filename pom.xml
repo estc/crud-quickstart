@@ -27,6 +27,7 @@
         <lombok.version>1.18.24</lombok.version>
         <disruptor.version>3.4.4</disruptor.version>
         <hutool.version>5.8.26</hutool.version>
+        <easyexcel.verion>3.3.3</easyexcel.verion>
     </properties>
 
     <dependencyManagement>
@@ -93,6 +94,13 @@
                 <artifactId>hutool-all</artifactId>
                 <version>${hutool.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>easyexcel</artifactId>
+                <version>${easyexcel.verion}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -178,6 +186,11 @@
             <artifactId>disruptor</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+        </dependency>
+
 
     </dependencies>
 
@@ -194,6 +207,10 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
                 <configuration>
+                    <parameters>true</parameters>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.springframework.boot</groupId>

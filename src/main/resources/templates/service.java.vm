@@ -17,21 +17,21 @@ public interface ${table.serviceName} {
      * @param createVO 新建VO
      * @return id
      */
-    Long create${entity}(${entity}CreateVO createVO);
+    Long create(${entity}CreateVO createVO);
 
     /**
      * 更新
      *
      * @param updateVO 更新VO
      */
-    void update${entity}(${entity}UpdateVO updateVO);
+    void update(${entity}UpdateVO updateVO);
 
     /**
      * 删除
      *
      * @param id id
      */
-    void delete${entity}(Long id);
+    void delete(Long id);
 
     /**
      * 查询单个
@@ -39,7 +39,7 @@ public interface ${table.serviceName} {
      * @param id id
      * @return po
      */
-    ${entity} get${entity}(Long id);
+    ${entity} get(Long id);
 
     /**
      * 分页查询
@@ -47,6 +47,6 @@ public interface ${table.serviceName} {
      * @param pageVO 分页VO
      * @return pageResult
      */
-    PageResult<${entity}> page${entity}(${entity}PageVO pageVO);
+    PageResult<${entity}> page(${entity}PageVO pageVO);
 
 }

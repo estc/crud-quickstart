@@ -1,5 +1,6 @@
 package ${package.Controller};
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 #if(${restControllerStyle})
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +12,8 @@ import ${superControllerClassPackage};
 #end
 import cn.wnhyang.generator.pojo.PageResult;
 
+import java.io.IOException;
+
 import static cn.wnhyang.generator.pojo.CommonResult.success;
 
 /**
@@ -19,6 +22,7 @@ import static cn.wnhyang.generator.pojo.CommonResult.success;
  * @author ${author}
  * @since ${date}
  */
+@Slf4j
 #if(${restControllerStyle})
 @RestController
 #else
@@ -45,8 +49,8 @@ public class ${table.controllerName} {
      * @return id
      */
     @PostMapping
-    public CommonResult<Long> create${entity}(@RequestBody @Valid ${entity}CreateVO createVO) {
-        return success(${table.entityPath}Service.create${entity}(createVO));
+    public CommonResult<Long> create(@RequestBody @Valid ${entity}CreateVO createVO) {
+        return success(${table.entityPath}Service.create(createVO));
     }
     
     /**
@@ -56,8 +60,8 @@ public class ${table.controllerName} {
      * @return true/false
      */
     @PutMapping
-    public CommonResult<Boolean> update${entity}(@RequestBody @Valid ${entity}UpdateVO updateVO) {
-        ${table.entityPath}Service.update${entity}(updateVO);
+    public CommonResult<Boolean> update(@RequestBody @Valid ${entity}UpdateVO updateVO) {
+        ${table.entityPath}Service.update(updateVO);
         return success(true);
     }
     
@@ -68,8 +72,8 @@ public class ${table.controllerName} {
      * @return true/false
      */
     @DeleteMapping
-    public CommonResult<Boolean> delete${entity}(@RequestParam("id") Long id) {
-        ${table.entityPath}Service.delete${entity}(id);
+    public CommonResult<Boolean> delete(@RequestParam("id") Long id) {
+        ${table.entityPath}Service.delete(id);
         return success(true);
     }
     
@@ -80,8 +84,8 @@ public class ${table.controllerName} {
      * @return vo
      */
     @GetMapping("/{id}")
-    public CommonResult<${entity}VO> get${entity}(@PathVariable("id") Long id) {
-        return success(${entity}Convert.INSTANCE.convert(${table.entityPath}Service.get${entity}(id)));
+    public CommonResult<${entity}VO> get(@PathVariable("id") Long id) {
+        return success(${entity}Convert.INSTANCE.convert(${table.entityPath}Service.get(id)));
     }
     
     /**
@@ -91,8 +95,21 @@ public class ${table.controllerName} {
      * @return pageResult
      */
     @GetMapping("/page")
-    public CommonResult<PageResult<${entity}VO>> page${entity}(@Valid ${entity}PageVO pageVO) {
-        return success(${entity}Convert.INSTANCE.convert(${table.entityPath}Service.page${entity}(pageVO)));
+    public CommonResult<PageResult<${entity}VO>> page(@Valid ${entity}PageVO pageVO) {
+        return success(${entity}Convert.INSTANCE.convert(${table.entityPath}Service.page(pageVO)));
+    }
+
+    /**
+    * 导出
+    *
+    * @param pageVO 导出VO
+    * @param response response
+    * @throws IOException IO异常
+    */
+    @GetMapping("/export")
+    public void exportUserList(@Valid ${entity}PageVO pageVO, HttpServletResponse response) throws IOException {
+        // 输出 Excel
+        ExcelUtils.write(response, "${entity}VO.xls", "数据", ${entity}VO.class, ${entity}Convert.INSTANCE.convert(${table.entityPath}Service.page(pageVO)).getList());
     }
 }
 #end
