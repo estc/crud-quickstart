@@ -103,12 +103,13 @@ public class GenerateController {
 
     @PostMapping("/api/generate")
     @ResponseBody
-    public CommonResult<Boolean> generate(@RequestBody MbpGeneratorConfig dbConfig) {
+    public CommonResult<MbpGeneratorConfig> generate(@RequestBody MbpGeneratorConfig dbConfig) {
 
         log.info("dbConfig: {}", dbConfig);
 
         MbpGeneratorUtil.generate(dbConfig);
-        return CommonResult.success(true);
+        dbConfig.setStep(3);
+        return CommonResult.success(dbConfig);
     }
 
     private boolean isConnectionOK(String url, String username, String password) {

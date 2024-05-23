@@ -16,29 +16,32 @@
     <!-- 隐藏step -->
     <input id="step" type="hidden" th:field="*{step}"/>
 
-    <!-- 第一步：选择数据库类型 -->
+    <!-- 填写数据库信息 -->
     <div th:if="${dbConfig.step >= 0}">
-        <h3>步骤1: 选择数据库类型</h3>
+        <!-- 红色标题 -->
+        <h3 id="step1" style="color: red;">步骤1: 填写数据库信息</h3>
         <!-- JdbcUrl -->
-        <label for="jdbcUrl"></label>
-        <input id="jdbcUrl" th:field="*{jdbcUrl}" placeholder="jdbcUrl" required></input>
+        <label for="jdbcUrl">jdbcUrl</label>
+        <!-- 设置宽度 -->
+        <input id="jdbcUrl" th:field="*{jdbcUrl}" placeholder="jdbcUrl" style="width: 300px;" required></input>
         <!-- driverClassName -->
-        <label for="driverClassName"></label>
-        <input id="driverClassName" th:field="*{driverClassName}" placeholder="driverClassName" required></input>
+        <label for="driverClassName">driverClassName</label>
+        <input id="driverClassName" th:field="*{driverClassName}" placeholder="driverClassName" style="width: 200px;" required></input>
+        <br>
         <!-- 用户名 -->
-        <label for="username"></label>
+        <label for="username">用户名</label>
         <input id="username" th:field="*{username}" placeholder="username" required></input>
         <!-- 密码 -->
-        <label for="password"></label>
+        <label for="password">密码</label>
         <input id="password" th:field="*{password}" placeholder="password" required></input>
     </div>
 
     <br>
 
     <div th:if="${dbConfig.step >= 0}">
-        <h3>步骤2: 选择数据库</h3>
+        <h3 id="step2">步骤2: 选择数据库</h3>
         <!-- 选择数据库 -->
-        <label for="database"></label>
+        <label for="database">数据库</label>
         <select id="database" th:field="*{database}">
             <option th:each="db : ${databases}" th:value="${db}" th:text="${db}"></option>
         </select>
@@ -48,9 +51,9 @@
     <br>
 
     <div th:if="${dbConfig.step >= 0}">
-        <h3>步骤3: 选择表</h3>
+        <h3 id="step3">步骤3: 选择表</h3>
         <!-- 选择表 -->
-        <label for="tableNames"></label>
+        <label for="tableNames">表</label>
         <select id="tableNames" multiple>
             <option th:each="table : ${tablesInfos}" th:value="${table.name}" th:text="${table.comment}"></option>
         </select>
@@ -58,18 +61,18 @@
     </div>
 
     <div th:if="${dbConfig.step >= 0}">
-        <h3>步骤4: 生成配置</h3>
+        <h3 id="step4">步骤4: 生成配置</h3>
         <!-- 表前缀（,分隔） -->
-        <label for="tablePrefix"></label>
+        <label for="tablePrefix">表前缀</label>
         <input id="tablePrefix" th:field="*{tablePrefix}" placeholder="表前缀" required></input>
         <!-- 父包名 -->
-        <label for="parent"></label>
+        <label for="parent">父包名</label>
         <input id="parent" th:field="*{parent}" placeholder="父包名" required></input>
         <!-- 模块名 -->
-        <label for="moduleName"></label>
+        <label for="moduleName">模块名</label>
         <input id="moduleName" th:field="*{moduleName}" placeholder="模块名"></input>
         <!-- 作者 -->
-        <label for="author"></label>
+        <label for="author">作者</label>
         <input id="author" th:field="*{author}" placeholder="作者" required></input>
     </div>
 
@@ -77,7 +80,7 @@
 
     <!-- 第三步：确认信息 -->
     <div th:if="${dbConfig.step >= 0}">
-        <button id="submitButton" type="submit" th:text="${dbConfig.step == 2 ? '确认' : '下一步'}"></button>
+        <button id="submitButton" type="submit">测试连接</button>
     </div>
 </form>
 
@@ -145,10 +148,20 @@
                         if (data.data.step === 1) {
                             updateDatabaseOptions(data.data.databases);
                             // 修改按钮文本
-                            $('#submitButton').text('下一步');
+                            $('#submitButton').text('查询该数据库的表');
+                            // 步骤二标题改为红色
+                            $('#step2').css('color', 'red');
+                            alert('连接成功！请选择数据库！');
                         } else if (data.data.step === 2) {
                             updateTableOptions(data.data.tableInfos);
-                            $('#submitButton').text('确认');
+                            // 修改按钮文本
+                            $('#submitButton').text('确认生成配置并生成代码');
+                            // 步骤三标题改为红色
+                            $('#step3').css('color', 'red');
+                            alert('请选择表，并填写生成配置！');
+                        } else {
+                            $('#step4').css('color', 'red');
+                            alert('生成代码成功！');
                         }
                         console.log('success');
                     } else {
