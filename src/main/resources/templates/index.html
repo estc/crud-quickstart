@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Generator</title>
+</head>
+<body>
+<h1 th:text="${data}"></h1>
+
+<form id="form" th:object="${dbConfig}">
+    <div th:if="${#fields.hasErrors('*')}">
+        <ul>
+            <li th:each="error : ${#fields.errors('*')}" th:text="${error}"></li>
+        </ul>
+    </div>
+    <!-- 隐藏step -->
+    <input id="step" type="hidden" th:field="*{step}"/>
+
+    <!-- 第一步：选择数据库类型 -->
+    <div th:if="${dbConfig.step >= 0}">
+        <h3>步骤1: 选择数据库类型</h3>
+        <!-- JdbcUrl -->
+        <label for="jdbcUrl"></label>
+        <input id="jdbcUrl" th:field="*{jdbcUrl}" placeholder="jdbcUrl" required></input>
+        <!-- driverClassName -->
+        <label for="driverClassName"></label>
+        <input id="driverClassName" th:field="*{driverClassName}" placeholder="driverClassName" required></input>
+        <!-- 用户名 -->
+        <label for="username"></label>
+        <input id="username" th:field="*{username}" placeholder="username" required></input>
+        <!-- 密码 -->
+        <label for="password"></label>
+        <input id="password" th:field="*{password}" placeholder="password" required></input>
+    </div>
+
+    <br>
+
+    <div th:if="${dbConfig.step >= 0}">
+        <h3>步骤2: 选择数据库</h3>
+        <!-- 选择数据库 -->
+        <label for="database"></label>
+        <select id="database" th:field="*{database}">
+            <option th:each="db : ${databases}" th:value="${db}" th:text="${db}"></option>
+        </select>
+
+    </div>
+
+    <br>
+
+    <div th:if="${dbConfig.step >= 0}">
+        <h3>步骤3: 选择表</h3>
+        <!-- 选择表 -->
+        <label for="tableNames"></label>
+        <select id="tableNames" multiple>
+            <option th:each="table : ${tablesInfos}" th:value="${table.name}" th:text="${table.comment}"></option>
+        </select>
+
+    </div>
+
+    <div th:if="${dbConfig.step >= 0}">
+        <h3>步骤4: 生成配置</h3>
+        <!-- 表前缀（,分隔） -->
+        <label for="tablePrefix"></label>
+        <input id="tablePrefix" th:field="*{tablePrefix}" placeholder="表前缀" required></input>
+        <!-- 父包名 -->
+        <label for="parent"></label>
+        <input id="parent" th:field="*{parent}" placeholder="父包名" required></input>
+        <!-- 模块名 -->
+        <label for="moduleName"></label>
+        <input id="moduleName" th:field="*{moduleName}" placeholder="模块名"></input>
+        <!-- 作者 -->
+        <label for="author"></label>
+        <input id="author" th:field="*{author}" placeholder="作者" required></input>
+    </div>
+
+    <br>
+
+    <!-- 第三步：确认信息 -->
+    <div th:if="${dbConfig.step >= 0}">
+        <button id="submitButton" type="submit" th:text="${dbConfig.step == 2 ? '确认' : '下一步'}"></button>
+    </div>
+</form>
+
+<!-- 使用CDN来引入jQuery，降低XSS风险，同时加快jQuery库的加载速度 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+    function updateStep(step) {
+        // 更新step的值
+        $('#step').val(step);
+    }
+
+    const optionTemplate = (value, text) => `<option value="${value}">${text}</option>`;
+
+    function updateDatabaseOptions(databases) {
+        $('#database')
+            .empty()
+            .append(databases.map(db => $(optionTemplate(db, db))));
+    }
+
+    function updateTableOptions(tableInfos) {
+        $('#tableNames')
+            .empty()
+            .append(tableInfos.map(table => $(optionTemplate(table.name, table.comment))))
+            .attr('multiple', true);
+    }
+
+    $(function () {
+        const form = $('#form');
+        const stepInput = $('#step'); // 获取step输入框
+
+        form.submit(function (e) {
+            e.preventDefault();
+
+            const step = parseInt(stepInput.val(), 10);
+            const formDataObj = {
+                ...serializeFormData(form),
+                tableNames: $('#tableNames').val()
+            }
+            const formDataJson = JSON.stringify(formDataObj);
+            console.log(formDataJson)
+
+            let apiUrl;
+            switch (step) {
+                case 0:
+                    apiUrl = '/api/databases';
+                    break;
+                case 1:
+                    apiUrl = '/api/tables';
+                    break;
+                // 添加其他case，或者默认情况
+                default:
+                    apiUrl = '/api/generate'; // 如果没有匹配的step，使用默认接口
+            }
+
+            $.ajax({
+                url: apiUrl,
+                type: "POST",
+                contentType: "application/json",
+                data: formDataJson,
+                success: function (data) {
+                    console.log(data);
+                    if (data.code === 0) {
+                        updateStep(data.data.step);
+                        if (data.data.step === 1) {
+                            updateDatabaseOptions(data.data.databases);
+                            // 修改按钮文本
+                            $('#submitButton').text('下一步');
+                        } else if (data.data.step === 2) {
+                            updateTableOptions(data.data.tableInfos);
+                            $('#submitButton').text('确认');
+                        }
+                        console.log('success');
+                    } else {
+                        alert(data.msg);
+                        console.warn('fail', data.msg);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Ajax request failed:', textStatus, ':', errorThrown);
+                }
+            });
+        });
+    });
+
+    // 其他函数保持不变
+
+    // 将表单数据转换为对象
+    function serializeFormData(form) {
+        const formDataObj = {};
+        form.serializeArray().forEach(item => formDataObj[item.name] = item.value);
+        return formDataObj;
+    }
+</script>
+</body>
+</html>
