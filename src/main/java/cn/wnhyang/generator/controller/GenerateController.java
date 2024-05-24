@@ -10,6 +10,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Lists;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,11 +33,18 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class GenerateController {
 
+    private final DataSourceProperties dataSourceProperties;
 
     @GetMapping("/")
     public String index(Model model) {
         MbpGeneratorConfig dbConfig = new MbpGeneratorConfig();
-        model.addAttribute("data", "123");
+        if (dataSourceProperties != null) {
+            dbConfig.setJdbcUrl(dataSourceProperties.getUrl());
+            dbConfig.setDriverClassName(dataSourceProperties.getDriverClassName());
+            dbConfig.setUsername(dataSourceProperties.getUsername());
+            dbConfig.setPassword(dataSourceProperties.getPassword());
+        }
+        model.addAttribute("data", "生成器");
         model.addAttribute("dbConfig", dbConfig);
         return "index";
     }
