@@ -13,7 +13,7 @@ import java.util.List;
  * @author wnhyang
  * @date 2024/5/14
  **/
-public class ExcelUtils {
+public class ExcelUtil {
 
     /**
      * 从Excel文件中读取数据。
