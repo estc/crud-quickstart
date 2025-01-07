@@ -2,7 +2,7 @@ package cn.wnhyang.generator.util;
 
 import cn.wnhyang.generator.model.MbpGeneratorConfig;
 import cn.wnhyang.generator.mybatis.BaseMapperX;
-import cn.wnhyang.generator.pojo.BasePO;
+import cn.wnhyang.generator.pojo.BaseDO;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.config.builder.CustomFile;
@@ -67,7 +67,7 @@ public class MbpGeneratorUtil {
                             //5.1、实体类策略配置
                             .entityBuilder()
                             .enableFileOverride() // 覆盖entity
-                            .superClass(BasePO.class)
+                            .superClass(BaseDO.class)
                             //.disableSerialVersionUID()  // 禁用生成 serialVersionUID 默认值 true
                             .enableLombok() // 开启 Lombok 默认值:false
                             .enableTableFieldAnnotation()       // 开启生成实体时生成字段注解 默认值 false

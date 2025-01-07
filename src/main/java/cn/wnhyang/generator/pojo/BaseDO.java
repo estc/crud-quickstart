@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
  * @date 2024/3/13
  **/
 @Data
-public class BasePO implements Serializable {
+public class BaseDO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1607296551466303270L;
 
