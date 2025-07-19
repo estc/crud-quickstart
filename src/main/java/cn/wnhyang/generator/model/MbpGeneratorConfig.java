@@ -21,7 +21,7 @@ public class MbpGeneratorConfig {
 
     private String driverClassName = "com.mysql.cj.jdbc.Driver";
 
-    private String username = "wnhyang";
+    private String username = "dbuser";
 
     private String password = "123456";
 
@@ -35,11 +35,11 @@ public class MbpGeneratorConfig {
 
     private String tablePrefix = "sys_,t_,c_,de_";
 
-    private String parent = "cn.wnhyang";
+    private String parent = "com.found";
 
     private String moduleName = "";
 
-    private String author = "wnhyang";
+    private String author = "wu_dh";
 
     public String getFullJdbcUrl() {
         return jdbcUrl + "/" + database;

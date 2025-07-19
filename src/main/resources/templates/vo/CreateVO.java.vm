@@ -39,9 +39,9 @@ public class ${entity}CreateVO {
 
     private static final long serialVersionUID = 1L;
 #end
+
 ## ----------  BEGIN 字段循环遍历  ----------
 #foreach($field in ${table.fields})
-
 #if(!${field.keyFlag})
 #if("$!field.comment" != "")
     #if(${springdoc})
@@ -54,6 +54,7 @@ public class ${entity}CreateVO {
      */
     #end
     private ${field.propertyType} ${field.propertyName};
+
 #end
 #end
 #end

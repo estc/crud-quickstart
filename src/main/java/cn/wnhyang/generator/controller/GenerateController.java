@@ -67,6 +67,7 @@ public class GenerateController {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(ds);
         List<Map<String, Object>> list = jdbcTemplate.queryForList("SHOW DATABASES");
         List<String> databaseInfos = Lists.newArrayList();
+        databaseInfos.add("-- 请选择数据库 --");
         list.forEach(map -> {
             String database = (String) map.get("Database");
             databaseInfos.add(database);
@@ -87,7 +88,7 @@ public class GenerateController {
         }
 
         HikariDataSource ds = new HikariDataSource();
-        ds.setJdbcUrl(dbConfig.getFullJdbcUrl());
+        ds.setJdbcUrl(dbConfig.getJdbcUrl());  //getFullJdbcUrl
         ds.setUsername(dbConfig.getUsername());
         ds.setPassword(dbConfig.getPassword());
         ds.setDriverClassName(dbConfig.getDriverClassName());

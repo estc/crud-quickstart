@@ -17,63 +17,62 @@
     <input id="step" type="hidden" th:field="*{step}"/>
 
     <!-- 填写数据库信息 -->
-    <div th:if="${dbConfig.step >= 0}">
+    <div th:if="${dbConfig.step >= 0}" id="v0" style="display: block;">
         <!-- 红色标题 -->
         <h3 id="step1" style="color: red;">步骤1: 填写数据库信息</h3>
         <!-- JdbcUrl -->
-        <label for="jdbcUrl">jdbcUrl</label>
-        <!-- 设置宽度 -->
-        <input id="jdbcUrl" th:field="*{jdbcUrl}" placeholder="jdbcUrl" style="width: 300px;" required></input>
+        <label for="jdbcUrl">地  址</label>
+        <input id="jdbcTemplate" th:value="*{jdbcUrl}" type="hidden"></input>
+        <input id="jdbcUrl" th:field="*{jdbcUrl}" placeholder="jdbcUrl" style="width: 100%;" required></input>
         <!-- driverClassName -->
-        <label for="driverClassName">driverClassName</label>
-        <input id="driverClassName" th:field="*{driverClassName}" placeholder="driverClassName" style="width: 200px;" required></input>
+        <br><label for="driverClassName">驱  动</label>
+        <input id="driverClassName" th:field="*{driverClassName}" placeholder="driverClassName" style="width: 100%;" required></input>
         <br>
         <!-- 用户名 -->
-        <label for="username">用户名</label>
-        <input id="username" th:field="*{username}" placeholder="username" required></input>
+        <br><label for="username">用  户</label>
+        <input id="username" th:field="*{username}" placeholder="username"  style="width: 100%;" required></input>
         <!-- 密码 -->
-        <label for="password">密码</label>
-        <input id="password" th:field="*{password}" placeholder="password" required></input>
+        <br><label for="password">密  码</label>
+        <input id="password" th:field="*{password}" placeholder="password"  style="width: 100%;" required></input>
     </div>
 
-    <br>
 
-    <div th:if="${dbConfig.step >= 0}">
+    <div th:if="${dbConfig.step >= 0}" id="v1" style="display: none;">
         <h3 id="step2">步骤2: 选择数据库</h3>
         <!-- 选择数据库 -->
         <label for="database">数据库</label>
-        <select id="database" th:field="*{database}">
+        <select id="database" th:field="*{database}" onchange="updateUrlDb()" style="width: 100%;">
             <option th:each="db : ${databases}" th:value="${db}" th:text="${db}"></option>
         </select>
 
     </div>
 
-    <br>
 
-    <div th:if="${dbConfig.step >= 0}">
+    <div th:if="${dbConfig.step >= 0}" id="v2" style="display: none;">
         <h3 id="step3">步骤3: 选择表</h3>
         <!-- 选择表 -->
         <label for="tableNames">表</label>
-        <select id="tableNames" multiple>
+        <select id="tableNames" multiple style="width: 100%; height: 500px;">
             <option th:each="table : ${tablesInfos}" th:value="${table.name}" th:text="${table.comment}"></option>
         </select>
 
     </div>
 
-    <div th:if="${dbConfig.step >= 0}">
+
+    <div th:if="${dbConfig.step >= 0}" id="v3" style="display: none;">
         <h3 id="step4">步骤4: 生成配置</h3>
         <!-- 表前缀（,分隔） -->
         <label for="tablePrefix">表前缀</label>
-        <input id="tablePrefix" th:field="*{tablePrefix}" placeholder="表前缀" required></input>
+        <input id="tablePrefix" th:field="*{tablePrefix}" placeholder="表前缀" style="width: 100%;" required></input>
         <!-- 父包名 -->
-        <label for="parent">父包名</label>
-        <input id="parent" th:field="*{parent}" placeholder="父包名" required></input>
+        <br><label for="parent">父包名</label>
+        <input id="parent" th:field="*{parent}" placeholder="父包名" style="width: 100%;" required></input>
         <!-- 模块名 -->
-        <label for="moduleName">模块名</label>
-        <input id="moduleName" th:field="*{moduleName}" placeholder="模块名"></input>
+        <br><label for="moduleName">模块名</label>
+        <input id="moduleName" th:field="*{moduleName}" placeholder="模块名" style="width: 100%;"></input>
         <!-- 作者 -->
-        <label for="author">作者</label>
-        <input id="author" th:field="*{author}" placeholder="作者" required></input>
+        <br><label for="author">作者</label>
+        <input id="author" th:field="*{author}" placeholder="作者" style="width: 100%;" required></input>
     </div>
 
     <br>
@@ -94,6 +93,18 @@
     }
 
     const optionTemplate = (value, text) => `<option value="${value}">${text}</option>`;
+
+    function updateUrlDb() {
+        var select = document.getElementById('database');
+        var jdbcInput = document.getElementById('jdbcUrl');
+        var selectedDb = select.value;
+
+        // 获取原始URL
+        var originalUrl = document.getElementById('jdbcTemplate').value; // $('#jdbcTemplate').value;
+
+        // 构建新的JDBC URL
+        jdbcInput.value = originalUrl.replaceAll("generatorDb",  selectedDb);
+    }
 
     function updateDatabaseOptions(databases) {
         $('#database')
@@ -163,6 +174,7 @@
                             $('#step4').css('color', 'red');
                             alert('生成代码成功！');
                         }
+                        viewDiv(data.data.step);
                         console.log('success');
                     } else {
                         alert(data.msg);
@@ -183,6 +195,15 @@
         const formDataObj = {};
         form.serializeArray().forEach(item => formDataObj[item.name] = item.value);
         return formDataObj;
+    }
+
+    function viewDiv(step){
+        $('#v0').hide();
+        $('#v1').hide();
+        $('#v2').hide();
+        $('#v3').hide();
+
+        $('#v' + step).show();
     }
 </script>
 </body>

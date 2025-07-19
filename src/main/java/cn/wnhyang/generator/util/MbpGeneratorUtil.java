@@ -26,7 +26,7 @@ public class MbpGeneratorUtil {
 
     public static void generate(MbpGeneratorConfig config) {
         //1、配置数据源
-        FastAutoGenerator.create(config.getFullJdbcUrl(), config.getUsername(), config.getPassword())
+        FastAutoGenerator.create(config.getJdbcUrl(), config.getUsername(), config.getPassword())  //getFullJdbcUrl
                 //2、全局配置
                 .globalConfig(builder -> {
                     builder.disableOpenDir() // 禁止打开输出目录 默认 true
