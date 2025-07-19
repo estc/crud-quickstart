@@ -1,16 +1,18 @@
 package ${package.Controller};
 
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
-    #if(${restControllerStyle})
-    import org.springframework.web.bind.annotation.RequestParam;
-    import org.springframework.web.bind.annotation.RestController;
-    #else
-    import org.springframework.stereotype.Controller;
-    #end
-    #if(${superControllerClassPackage})
-    import ${superControllerClassPackage};
-    #end
+#if(${restControllerStyle})
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+#else
+import org.springframework.stereotype.Controller;
+#end
+#if(${superControllerClassPackage})
+import ${superControllerClassPackage};
+#end
 import cn.wnhyang.generator.pojo.PageResult;
 
 import java.io.IOException;
@@ -24,107 +26,107 @@ import static cn.wnhyang.generator.pojo.CommonResult.success;
  * @since ${date}
  */
 @Slf4j
-    #if(${restControllerStyle})
-    @RestController
-    #else
-    @Controller
-    #end
+#if(${restControllerStyle})
+@RestController
+#else
+@Controller
+#end
 @RequestMapping("#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
 @RequiredArgsConstructor
 #if(${kotlin})
-        class ${table.controllerName}#if(${superControllerClass}) : ${superControllerClass}()#end
+class ${table.controllerName}#if(${superControllerClass}) : ${superControllerClass}()#end
 
 #else
-    #if(${superControllerClass})
-            public class ${table.controllerName} extends ${superControllerClass} {
-    #else
-            public class ${table.controllerName} {
-    #end
+#if(${superControllerClass})
+public class ${table.controllerName} extends ${superControllerClass} {
+#else
+public class ${table.controllerName} {
+#end
 
-        private final ${entity}Service ${table.entityPath}Service;
+    private final ${entity}Service ${table.entityPath}Service;
 
-        /**
-         * 新增
-         *
-         * @param createVO 创建VO
-         * @return id
-         */
-        @PostMapping
-        public CommonResult<Long> create(@RequestBody @Valid ${entity}CreateVO createVO) {
-            return success(${table.entityPath}Service.create(createVO));
-        }
+    /**
+     * 新增
+     *
+     * @param createVO 创建VO
+     * @return id
+     */
+    @PostMapping
+    public CommonResult<Long> create(@RequestBody @Valid ${entity}CreateVO createVO) {
+        return success(${table.entityPath}Service.create(createVO));
+    }
 
-        /**
-         * 更新
-         *
-         * @param updateVO 更新VO
-         * @return true/false
-         */
-        @PutMapping
-        public CommonResult<Boolean> update(@RequestBody @Valid ${entity}UpdateVO updateVO) {
-                ${table.entityPath}Service.update(updateVO);
-            return success(true);
-        }
+    /**
+     * 更新
+     *
+     * @param updateVO 更新VO
+     * @return true/false
+     */
+    @PutMapping
+    public CommonResult<Boolean> update(@RequestBody @Valid ${entity}UpdateVO updateVO) {
+        ${table.entityPath}Service.update(updateVO);
+        return success(true);
+    }
 
-        /**
-         * 删除
-         *
-         * @param id id
-         * @return true/false
-         */
-        @DeleteMapping
-        public CommonResult<Boolean> delete(@RequestParam("id") Long id) {
-                ${table.entityPath}Service.delete(id);
-            return success(true);
-        }
+    /**
+     * 删除
+     *
+     * @param id id
+     * @return true/false
+     */
+    @DeleteMapping
+    public CommonResult<Boolean> delete(@RequestParam("id") Long id) {
+        ${table.entityPath}Service.delete(id);
+        return success(true);
+    }
 
-        /**
-         * 查询单个
-         *
-         * @param id id
-         * @return vo
-         */
-        @GetMapping
-        public CommonResult<${entity}VO> get(@RequestParam("id") Long id) {
-            return success(${entity}Convert.INSTANCE.convert(${table.entityPath}Service.get(id)));
-        }
+    /**
+     * 查询单个
+     *
+     * @param id id
+     * @return vo
+     */
+    @GetMapping
+    public CommonResult<${entity}VO> get(@RequestParam("id") Long id) {
+        return success(${entity}Convert.INSTANCE.convert(${table.entityPath}Service.get(id)));
+    }
 
-        /**
-         * 分页查询
-         *
-         * @param pageVO 分页VO
-         * @return pageResult
-         */
-        @GetMapping("/page")
-        public CommonResult<PageResult<${entity}VO>> page(@Valid ${entity}PageVO pageVO) {
-            return success(${entity}Convert.INSTANCE.convert(${table.entityPath}Service.page(pageVO)));
-        }
+    /**
+     * 分页查询
+     *
+     * @param pageVO 分页VO
+     * @return pageResult
+     */
+    @GetMapping("/page")
+    public CommonResult<PageResult<${entity}VO>> page(@Valid ${entity}PageVO pageVO) {
+        return success(${entity}Convert.INSTANCE.convert(${table.entityPath}Service.page(pageVO)));
+    }
 
-        /**
-        * 导出
-        *
-        * @param pageVO 导出VO
-        * @param response response
-        * @throws IOException IO异常
-        */
-        @GetMapping("/export")
-        public void exportExcel(@Valid ${entity}PageVO pageVO, HttpServletResponse response) throws IOException {
-            // 输出 Excel
-            ExcelUtil.write(response, "${entity}VO.xls", "数据", ${entity}VO.class, ${entity}Convert.INSTANCE.convert(${table.entityPath}Service.page(pageVO)).getList());
-        }
+    /**
+    * 导出
+    *
+    * @param pageVO 导出VO
+    * @param response response
+    * @throws IOException IO异常
+    */
+    @GetMapping("/export")
+    public void exportExcel(@Valid ${entity}PageVO pageVO, HttpServletResponse response) throws IOException {
+        // 输出 Excel
+        ExcelUtil.write(response, "${entity}VO.xls", "数据", ${entity}VO.class, ${entity}Convert.INSTANCE.convert(${table.entityPath}Service.page(pageVO)).getList());
+    }
 
-        /**
-         * 导入
-         *
-         * @param file 文件
-         * @return 结果
-         * @throws IOException IO异常
-         */
-        @PostMapping("/import")
-        public CommonResult<Boolean> importExcel(@RequestParam("file") MultipartFile file) throws IOException {
-            List<${entity}VO> read = ExcelUtil.read(file, ${entity}VO.class);
-            // do something
-            return success(true);
-        }
+    /**
+     * 导入
+     *
+     * @param file 文件
+     * @return 结果
+     * @throws IOException IO异常
+     */
+    @PostMapping("/import")
+    public CommonResult<Boolean> importExcel(@RequestParam("file") MultipartFile file) throws IOException {
+        List<${entity}VO> read = ExcelUtil.read(file, ${entity}VO.class);
+        // do something
+        return success(true);
+    }
 }
 #end
