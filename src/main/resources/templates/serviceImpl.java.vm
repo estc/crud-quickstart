@@ -24,17 +24,15 @@ public class ${table.serviceImplName} implements ${table.serviceName} {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Long create(${entity}CreateVO createVO) {
-        ${entity} ${table.entityPath} = ${entity}Convert.INSTANCE.convert(createVO);
-        ${table.entityPath}Mapper.insert(${table.entityPath});
+    public Long create(${entity}VO ${table.entityPath}VO) {
+        ${table.entityPath}Mapper.insert(${table.entityPath}VO);
         return ${table.entityPath}.getId();
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void update(${entity}UpdateVO updateVO) {
-        ${entity} ${table.entityPath} = ${entity}Convert.INSTANCE.convert(updateVO);
-        ${table.entityPath}Mapper.updateById(${table.entityPath});
+    public void update(${entity}VO ${table.entityPath}VO) {
+        ${table.entityPath}Mapper.updateById(${table.entityPath}VO);
     }
 
     @Override
@@ -49,8 +47,8 @@ public class ${table.serviceImplName} implements ${table.serviceName} {
     }
 
     @Override
-    public PageResult<${entity}> page(${entity}PageVO pageVO) {
-        return ${table.entityPath}Mapper.selectPage(pageVO);
+    public PageResult<${entity}> page(${entity}VO ${table.entityPath}VO) {
+        return ${table.entityPath}Mapper.selectPage(${table.entityPath}VO);
     }
 
 }

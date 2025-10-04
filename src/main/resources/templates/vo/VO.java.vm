@@ -31,7 +31,7 @@ import lombok.experimental.Accessors;
 @ApiModel(value = "${entity}对象", description = "$!{table.comment}")
 #end
 #if(${entitySerialVersionUID})
-public class ${entity}VO extends ${entity}CreateVO {
+public class ${entity}VO {
 #else
 public class ${entity}VO {
 #end

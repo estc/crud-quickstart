@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Generator</title>
 </head>
-<body>
+<body style="margin: 30px 10px;">
 <h1 th:text="${data}"></h1>
 
 <form id="form" th:object="${dbConfig}">
@@ -52,10 +52,9 @@
         <h3 id="step3">步骤3: 选择表</h3>
         <!-- 选择表 -->
         <label for="tableNames">表</label>
-        <select id="tableNames" multiple style="width: 100%; height: 500px;">
+        <select id="tableNames" multiple style="width: 100%; height: 400px;">
             <option th:each="table : ${tablesInfos}" th:value="${table.name}" th:text="${table.comment}"></option>
         </select>
-
     </div>
 
 
@@ -74,6 +73,7 @@
         <br><label for="author">作者</label>
         <input id="author" th:field="*{author}" placeholder="作者" style="width: 100%;" required></input>
     </div>
+
 
     <br>
 
@@ -140,8 +140,27 @@
                     apiUrl = '/api/databases';
                     break;
                 case 1:
+                    const dbSelected = $('#database').val();
+                    if ("-- 请选择数据库 --"==dbSelected) {
+                        alert("请先选择数据库");
+                        return;
+                    }
                     apiUrl = '/api/tables';
                     break;
+                case 2:
+                    const tabSelected = $('#tableNames').val()
+                    if (""==tabSelected) {
+                        alert("请先选择表格");
+                        return;
+                    }
+                    $('#v2').hide();
+                    $('#v3').show();
+                    updateStep(3);
+
+                    $('#submitButton').text('生成代码');
+                    $('#step4').css('color', 'red');
+
+                    return;
                 // 添加其他case，或者默认情况
                 default:
                     apiUrl = '/api/generate'; // 如果没有匹配的step，使用默认接口
@@ -159,18 +178,19 @@
                         if (data.data.step === 1) {
                             updateDatabaseOptions(data.data.databases);
                             // 修改按钮文本
-                            $('#submitButton').text('查询该数据库的表');
+                            $('#submitButton').text('下一步：查询该数据库的表');
                             // 步骤二标题改为红色
                             $('#step2').css('color', 'red');
                             alert('连接成功！请选择数据库！');
                         } else if (data.data.step === 2) {
                             updateTableOptions(data.data.tableInfos);
                             // 修改按钮文本
-                            $('#submitButton').text('确认生成配置并生成代码');
+                            $('#submitButton').text('下一步：修改生成配置');
                             // 步骤三标题改为红色
                             $('#step3').css('color', 'red');
                             alert('请选择表，并填写生成配置！');
                         } else {
+                            $('#submitButton').text('生成代码');
                             $('#step4').css('color', 'red');
                             alert('生成代码成功！');
                         }
@@ -202,7 +222,6 @@
         $('#v1').hide();
         $('#v2').hide();
         $('#v3').hide();
-
         $('#v' + step).show();
     }
 </script>

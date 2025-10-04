@@ -108,8 +108,8 @@ public class MbpGeneratorUtil {
                 .injectionConfig(consumer -> {
                     Map<String, Object> customMap = new HashMap<>();
                     customMap.put("dto", config.getParent() + ".dto");
-                    customMap.put("create", config.getParent() + ".vo.create");
-                    customMap.put("update", config.getParent() + ".vo.update");
+                    //customMap.put("create", config.getParent() + ".vo.create");
+                    //customMap.put("update", config.getParent() + ".vo.update");
                     customMap.put("vo", config.getParent() + ".vo");
                     customMap.put("page", config.getParent() + ".vo.page");
                     customMap.put("convert", config.getParent() + ".convert");

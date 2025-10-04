@@ -2,6 +2,7 @@ package ${package.Service};
 
 import ${package.Entity}.${entity};
 import cn.wnhyang.generator.pojo.PageResult;
+import ${cfg.vo}.${entity}VO;
 
 /**
  * $!{table.comment} 服务类
@@ -14,17 +15,17 @@ public interface ${table.serviceName} {
     /**
      * 新建
      *
-     * @param createVO 新建VO
+     * @param ${table.entityPath}VO 新建VO
      * @return id
      */
-    Long create(${entity}CreateVO createVO);
+    Long create(${entity}VO ${table.entityPath}VO);
 
     /**
      * 更新
      *
-     * @param updateVO 更新VO
+     * @param ${table.entityPath}VO 更新VO
      */
-    void update(${entity}UpdateVO updateVO);
+    void update(${entity}VO ${table.entityPath}VO);
 
     /**
      * 删除
@@ -44,9 +45,9 @@ public interface ${table.serviceName} {
     /**
      * 分页查询
      *
-     * @param pageVO 分页VO
+     * @param${table.entityPath}VO 分页VO
      * @return pageResult
      */
-    PageResult<${entity}> page(${entity}PageVO pageVO);
+    PageResult<${entity}> page(${entity}VO ${table.entityPath}VO);
 
 }
